@@ -1,0 +1,55 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../oc-core-utils/oc-core-utils.html">
+
+<dom-module id="oc-terminal-api">
+	<template>
+		<iron-ajax id="getOrganisationDevices"></iron-ajax>
+		<iron-ajax id="deleteTerminal"></iron-ajax>
+		<iron-ajax id="addTerminal"></iron-ajax>
+	</template>
+
+	<script>
+		/**
+		 * `oc-terminal-api`
+		 * Api endpoint for all transaction related queries
+		 *
+		 * @customElement
+		 * @polymer
+		 * @demo demo/index.html
+		 */
+		class OcTerminalApi extends Ordercloud.ApiMixin(Polymer.Element) {
+			static get is() {
+				return 'oc-terminal-api';
+			}
+
+			static get properties() {
+				return {}
+			};
+
+			 getOrganisationDevices(orgid) {
+				this.$.getOrganisationDevices.url = this._generateCardServiceUrl('terminal/?orgid='+ orgid);
+				this.$.getOrganisationDevices.method = 'GET';
+				this.$.getOrganisationDevices.contentType = 'application/json';
+				return this._generateRequest(this.$.getOrganisationDevices);
+			}
+
+			addTerminal(terminalDetail) {
+				this.$.addTerminal.url = this._generateCardServiceUrl('terminal/');
+				this.$.addTerminal.method = 'POST';
+				this.$.addTerminal.body = terminalDetail;
+				this.$.addTerminal.contentType = 'application/json';
+				return this._generateRequest(this.$.addTerminal);
+			}
+
+			deleteTerminal(terminalId) {
+				this.$.deleteTerminal.url = this._generateCardServiceUrl('terminal/'+ terminalId);
+				this.$.deleteTerminal.method = 'DELETE';
+				this.$.deleteTerminal.contentType = 'application/json';
+				return this._generateRequest(this.$.deleteTerminal);
+			}
+		}
+
+		window.customElements.define(OcTerminalApi.is, OcTerminalApi);
+	</script>
+</dom-module>
