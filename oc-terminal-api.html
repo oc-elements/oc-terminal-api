@@ -1,12 +1,15 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
 <link rel="import" href="../oc-core-utils/oc-core-utils.html">
+<link rel="import" href="../oc-toast/oc-toast.html">
 
 <dom-module id="oc-terminal-api">
 	<template>
+		<oc-toast id="toast"></oc-toast>
 		<iron-ajax id="getOrganisationDevices"></iron-ajax>
 		<iron-ajax id="deleteTerminal"></iron-ajax>
-		<iron-ajax id="addTerminal"></iron-ajax>
+		<iron-ajax id="addTerminal" content-type="application/json"
+		handle-as="json" on-error="_handleErrorResponse"></iron-ajax>
 	</template>
 
 	<script>
@@ -41,6 +44,13 @@
 				this.$.addTerminal.contentType = 'application/json';
 				return this._generateRequest(this.$.addTerminal);
 			}
+
+			_handleErrorResponse (event) {
+				console.log(event.detail.request.response.Message);
+				this.$.toast.failed("Failed: " +  event.detail.request.response.Message);
+		}
+
+
 
 			deleteTerminal(terminalId) {
 				this.$.deleteTerminal.url = this._generateCardServiceUrl('terminal/'+ terminalId);
